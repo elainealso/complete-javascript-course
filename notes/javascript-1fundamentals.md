@@ -194,3 +194,12 @@ let age4 = 17;
 console.log(`I like to drink ${age4>=18?'wine':'water'}.`); //I like to drink water.
 `````
 
+````
+console.log(country); //Brazil
+console.log(population); //216000000
+console.log(
+  `${country}'s population is ${
+    population > 33000000 ? "above" : "below"
+  } average`
+);
+`````
