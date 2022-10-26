@@ -162,3 +162,140 @@ let tip20 = bill*(20/100);
 let count = bill >= 50 && bill <= 300 ? tip15 : tip20;
 console.log(count);
 console.log(`The bill was ${bill}, the tip was ${tip15}, and the total value ${count}`);
+
+
+
+const isIsland = false;
+let language;
+let population = 216000000;
+let country = "Brazil";
+
+console.log(typeof isIsland);
+console.log(typeof language);
+console.log(typeof population);
+console.log(typeof country);
+
+language = "Portuguese";
+console.log(typeof language);
+
+let nordeste = population / 2;
+let outros = population / 2;
+console.log(++nordeste);
+
+let finland = 6000000;
+console.log(finland > nordeste);
+let average = 33000000;
+console.log(nordeste > average);
+let description = `${country} is in America, and its ${population} million people speak ${language}`;
+console.log(description);
+
+console.log(
+  population > 33000000
+    ? `${country}s population is above average`
+    : `${country}s population is ${population - 33000000} million below average`
+);
+console.log("123" < 57);
+console.log(5 + 6 + "4" + 9 - 4 - 2);
+
+/*
+The Complete JavaScript Course 7
+LECTURE: Equality Operators: == vs. ===
+1. Declare a variable 'numNeighbours' based on a prompt input like this:
+prompt('How many neighbour countries does your country
+have?');
+2. If there is only 1 neighbour, log to the console 'Only 1 border!' (use loose equality
+== for now)
+3. Use an else-if block to log 'More than 1 border' in case 'numNeighbours'
+is greater than 1
+4. Use an else block to log 'No borders' (this block will be executed when
+'numNeighbours' is 0 or any other value)
+5. Test the code with different values of 'numNeighbours', including 1 and 0.
+6. Change == to ===, and test the code again, with the same values of
+'numNeighbours'. Notice what happens when there is exactly 1 border! Why
+is this happening?
+7. Finally, convert 'numNeighbours' to a number, and watch what happens now
+when you input 1
+8. Reflect on why we should use the === operator and type conversion in this
+situation
+
+let numNeighbours = Number(
+  prompt("How many neighbour countries does your country have?")
+);
+if (numNeighbours === 1) {
+  console.log("Only one border!");
+} else if (numNeighbours === 0) {
+  console.log("No borders");
+}
+
+LECTURE: Logical Operators
+1. Comment out the previous code so the prompt doesn't get in the way
+2. Let's say Sarah is looking for a new country to live in. She wants to live in a
+country that speaks english, has less than 50 million people and is not an
+island.
+3. Write an if statement to help Sarah figure out if your country is right for her.
+You will need to write a condition that accounts for all of Sarah's criteria. Take
+your time with this, and check part of the solution if necessary.
+4. If yours is the right country, log a string like this: 'You should live in Portugal :)'. If
+not, log 'Portugal does not meet your criteria :('
+5. Probably your country does not meet all the criteria. So go back and temporarily
+change some variables in order to make the condition true (unless you live in
+Canada :D)
+*/
+
+let isEnglishSpeakingCountry = false;
+let hasLessThan50Million = false;
+let isNotAnIsland = true;
+console.log(
+  isEnglishSpeakingCountry && hasLessThan50Million && isNotAnIsland
+    ? "You should live in Brazil"
+    : "Brazil does not meet your criteria"
+);
+
+/*
+Use a switch statement to log the following string for the given 'language':
+chinese or mandarin: 'MOST number of native speakers!'
+spanish: '2nd place in number of native speakers'
+english: '3rd place'
+hindi: 'Number 4'
+arabic: '5th most spoken language'
+for all other simply log 'Great language too :D'
+*/
+
+const language1 = "Spanish";
+
+switch (language1) {
+  case "Chinese":
+  case "Mandarin":
+    console.log("MOST number of native speakers!");
+    break;
+  case "Spanish":
+    console.log("2nd place in number of native speakers");
+    break;
+  case "English":
+    console.log("3rd place");
+    break;
+  case "Hindi":
+    console.log("Number 4");
+    break;
+  case "Arabic":
+    console.log("5th most spoken language");
+    break;
+  default:
+    console.log("Great language too :D");
+    break;
+}
+
+/*
+If your country's population is greater than 33 million, use the ternary operator
+to log a string like this to the console: 'Portugal's population is above average'.
+Otherwise, simply log 'Portugal's population is below average'. Notice how only
+one word changes between these two sentences!
+2. After checking the result, change the population temporarily to 13 and then to
+130. See the different results, and set the population back to original
+*/
+
+console.log(
+  `${country}'s population is ${
+    population > 33000000 ? "above" : "below"
+  } average`
+);
