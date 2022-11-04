@@ -554,6 +554,18 @@ for (let i = 0; i < outer.length; i++) {
     //then -> 0, 1, 2
   }
 }
+
+* Output:
+First/Outer -> index 0
+ -> Zero index 0
+ -> Zero index 1
+First/Outer -> index 1
+ -> One index 0
+First/Outer -> index 2
+ -> Two index 0
+ -> Two index 1
+ -> Two index 2
+
 ```
 
 ### While loop
@@ -602,3 +614,10 @@ Loop is about to end...
 
 _Math.trunc( ) returns the integer part of a number by removing any fractional digits. Ex: -0.123 becomes -0_
 _Math.random( ) returns a random number between 0 (inclusive), and 1 (exclusive)_
+
+Assignment/Coding challenge note:
+
+```
+
+${i + 1} day(s) -> 1 day, 2 days...
+```

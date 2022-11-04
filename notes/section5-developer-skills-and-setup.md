@@ -57,8 +57,20 @@ Download node (way of running js outside of the browser)
 Terminal/New Terminal
 (Command K to clear the window)
 node -v
-If it was already installed, you'll se a number, if not, write:
+If it was already installed, you'll see a number. 
+Install live-server writing:
 sudo npm install live-server -g
 (sudo in the beginning only if using Mac)
 Enter password
 Write 'live-server', enter, reload the page as soon as it opens and it's done.
+
+## DEBUGGING
+
+Prompt always returns strings
+
+### console.table 
+Useful when we have a big object, easier to check the values
+````
+console.table(); 
+````
+
