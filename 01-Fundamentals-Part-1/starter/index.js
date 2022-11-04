@@ -72,8 +72,8 @@ if (age1) {
 const age2 = 18;
 if (age2 === 18) console.log("adult");
 
-const celebration = Number(prompt("Give me 10 to celebrate"));
-console.log(typeof celebration); //number
+//const celebration = Number(prompt("Give me 10 to celebrate"));
+//console.log(typeof celebration); //number
 /*
 There are two gymnastics teams, Dolphins and Koalas. They compete against each
 other 3 times. The winner with the highest average score wins a trophy!
