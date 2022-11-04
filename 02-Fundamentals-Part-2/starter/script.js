@@ -702,6 +702,17 @@ for (let i = 0; i < outer.length; i++) {
     console.log(` -> ${outer[i][y]}`); //[i][y] is the inner iteration (0, 1, then 0, then 0, 1, 2)
   }
 }
+/*
+First/Outer -> index 0 
+ -> Zero index 0 
+ -> Zero index 1 
+First/Outer -> index 1 
+ -> One index 0 
+First/Outer -> index 2 
+ -> Two index 0 
+ -> Two index 1 
+ -> Two index 2
+*/
 
 //Assignment The while Loop
 const percentages3 = [];
