@@ -534,3 +534,398 @@ btnRoll.addEventListener('click', function () {
 });
 
 ````
+Holding the score:
+````
+btnHold.addEventListener('click', function () {
+  //1. Add current score to (total) active player's score
+  //we store the score in the score variable -> const scores = [0, 0];
+  scores[activePlayer] += currentScore; //scores[1] = scores[1] + currentScore -> player 1 = score 1, player 0 = score 0
+  //HTML: <p class="score" id="score--0">43</p> and <p class="score" id="score--1">43</p>
+  
+  document.getElementById(`current--${activePlayer}`).textContent =
+    scores[activePlayer];
+  //To complete the process, we need to switch the player, and to do that we need to repeat code above (but we have to keep the DRY principle)
+
+  //2. Check if player's score is >= 100
+  // (if so) Finish the game
+
+  // (if not) Switch to the next player
+});
+````
+**DRY**
+To avoid repetition, we transform this part of the code in a function:
+````
+    document.getElementById(`current--${activePlayer}`).textContent = 0;
+    currentScore = 0;
+    activePlayer = activePlayer === 0 ? 1 : 0;
+    player0El.classList.toggle('player--active');
+    player1El.classList.toggle('player--active');
+````
+
+````
+//Selecting elements
+const player0El = document.querySelector('.player--0');
+const player1El = document.querySelector('.player--1');
+const score0El = document.querySelector('#score--0');
+const score1El = document.getElementById('score--1');
+const current0El = document.getElementById('current--0');
+const current1El = document.getElementById('current--1');
+
+const diceEl = document.querySelector('.dice');
+const btnNew = document.querySelector('.btn--new');
+const btnRoll = document.querySelector('.btn--roll');
+const btnHold = document.querySelector('.btn--hold');
+
+// Starting conditions
+score0El.textContent = 0;
+score1El.textContent = 0;
+diceEl.classList.add('hidden');
+
+const scores = [0, 0];
+let currentScore = 0;
+let activePlayer = 0;
+
+const switchPlayer = function () {
+  //the function doesn't need parameters because the code is exactly the same in both situations
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+
+//Rolling dice functionality
+btnRoll.addEventListener('click', function () {
+  //1. Generating a random dice roll
+  const dice = Math.trunc(Math.random() * 6) + 1;
+  //2. Display dice
+  diceEl.classList.remove('hidden');
+  diceEl.src = `dice-${dice}.png`;
+  //3. Check for rolled 1
+  if (dice !== 1) {
+    //Add dice to current score
+    currentScore += dice;
+    document.getElementById(`current--${activePlayer}`).textContent =
+      currentScore;
+  } else {
+    //Switch to next player
+    switchPlayer();
+  }
+});
+
+btnHold.addEventListener('click', function () {
+  //1. Add current score to active player's score
+  scores[activePlayer] += currentScore;
+  document.getElementById(`score--${activePlayer}`).textContent =
+    scores[activePlayer];
+
+  //2. Check if player's score is >= 100
+  // (if so) Finish the game
+  if (scores[activePlayer] >= 100) {
+    /*
+  //CSS:
+  .player--winner {
+  background-color: #2f2f2f;
+  }
+  //HTML:
+  <section class="player player--0 player--active">
+  */
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.add('player--winner');
+    //we need to remove the active player class otherwise, we're going to have the active and the winner player class at the same time
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.remove('player--active');
+  } else {
+    // (if not) Switch to the next player
+    switchPlayer();
+  }
+});
+````
+Next steps:
+
+````
+//Selecting elements
+const player0El = document.querySelector('.player--0');
+const player1El = document.querySelector('.player--1');
+const score0El = document.querySelector('#score--0');
+const score1El = document.getElementById('score--1');
+const current0El = document.getElementById('current--0');
+const current1El = document.getElementById('current--1');
+
+const diceEl = document.querySelector('.dice');
+const btnNew = document.querySelector('.btn--new');
+const btnRoll = document.querySelector('.btn--roll');
+const btnHold = document.querySelector('.btn--hold');
+
+// Starting conditions
+score0El.textContent = 0;
+score1El.textContent = 0;
+diceEl.classList.add('hidden');
+
+const scores = [0, 0];
+let currentScore = 0;
+let activePlayer = 0;
+let playing = true; // <---------- create a state to establish that as soon as the game is finished, we can no longer play, otherwise it will continue and the other player will win too
+
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+
+//Rolling dice functionality
+btnRoll.addEventListener('click', function () {
+  // <---------- all this logic shall only be executed if we are playing
+  if (playing) {
+    //1. Generating a random dice roll
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    //2. Display dice
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    //3. Check for rolled 1
+    if (dice !== 1) {
+      //Add dice to current score
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      //Switch to next player
+      switchPlayer();
+    }
+  }
+});
+
+btnHold.addEventListener('click', function () {
+  if (playing) {
+    // <---------- all this logic shall only be executed if we are playing
+    //1. Add current score to active player's score
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+
+    //2. Check if player's score is >= 100
+    if (scores[activePlayer] >= 100) {
+      // (if so) Finish the game
+      playing = false; // <---------- reassigning this to false (alone) doesn't do anything
+      diceEl.classList.add('hidden'); // when a player wins the game, the dice is gone
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+    } else {
+      // (if not) Switch to the next player
+      switchPlayer();
+    }
+  }
+});
+````
+Resetting the game:
+
+Set back all the initial conditions of the game
+Remove winner class and set all the scores back to zero
+````
+<button class="btn btn--new">🔄 New game</button>  ->  const btnNew = document.querySelector('.btn--new');
+````
+
+````
+btnNew.addEventListener('click', function () {
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  //remove winner class
+  player0El.classList.remove('player--winner'); //player--winner is a class of CSS
+  player1El.classList.remove('player--winner');
+  //we don't know which player is the active player, so we need to remove from both and add to the first player
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+});
+
+````
+Then, we need to set the starting conditions:
+````
+const scores = [0, 0];
+let currentScore = 0;
+let activePlayer = 0;
+let playing = true;
+````
+To keep the code DRY, we'll create a function for initialization.
+And last steps:
+
+````
+//Selecting elements
+const player0El = document.querySelector('.player--0');
+const player1El = document.querySelector('.player--1');
+const score0El = document.querySelector('#score--0');
+const score1El = document.getElementById('score--1');
+const current0El = document.getElementById('current--0');
+const current1El = document.getElementById('current--1');
+
+const diceEl = document.querySelector('.dice');
+const btnNew = document.querySelector('.btn--new');
+const btnRoll = document.querySelector('.btn--roll');
+const btnHold = document.querySelector('.btn--hold');
+
+//scoping
+let scores, currentScore, activePlayer, playing;
+
+// Starting conditions
+const init = function () {
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  diceEl.classList.add('hidden');
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+};
+init();
+
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+//Rolling dice functionality
+btnRoll.addEventListener('click', function () {
+  if (playing) {
+    //1. Generating a random dice roll
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    //2. Display dice
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    //3. Check for rolled 1
+    if (dice !== 1) {
+      //Add dice to current score
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      //Switch to next player
+      switchPlayer();
+    }
+  }
+});
+btnHold.addEventListener('click', function () {
+  if (playing) {
+    //1. Add current score to active player's score
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+    //2. Check if player's score is >= 100
+    if (scores[activePlayer] >= 20) {
+      // (if so) Finish the game
+      playing = false;
+      diceEl.classList.add('hidden');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+    } else {
+      // (if not) Switch to the next player
+      switchPlayer();
+    }
+  }
+});
+btnNew.addEventListener('click', init); //function as a parameter
+
+````
+Final code:
+
+````
+
+const player0El = document.querySelector('.player--0');
+const player1El = document.querySelector('.player--1');
+const score0El = document.querySelector('#score--0');
+const score1El = document.getElementById('score--1');
+const current0El = document.getElementById('current--0');
+const current1El = document.getElementById('current--1');
+
+const diceEl = document.querySelector('.dice');
+const btnNew = document.querySelector('.btn--new');
+const btnRoll = document.querySelector('.btn--roll');
+const btnHold = document.querySelector('.btn--hold');
+
+let scores, currentScore, activePlayer, playing;
+
+const init = function () {
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  diceEl.classList.add('hidden');
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+};
+init();
+
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+btnRoll.addEventListener('click', function () {
+  if (playing) {
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    if (dice !== 1) {
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      switchPlayer();
+    }
+  }
+});
+btnHold.addEventListener('click', function () {
+  if (playing) {
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+    if (scores[activePlayer] >= 20) {
+      playing = false;
+      diceEl.classList.add('hidden');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+    } else {
+      switchPlayer();
+    }
+  }
+});
+btnNew.addEventListener('click', init);
+````
+
